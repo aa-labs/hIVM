@@ -5,7 +5,13 @@
   "devDependencies": {
     "bun-types": "latest"
   },
+  "scripts": {
+    "start": "bun run index.ts"
+  },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@stackr/stackr-js": "^0.1.5-alpha"
   }
 }
