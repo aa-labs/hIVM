@@ -12,6 +12,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@stackr/stackr-js": "^0.1.5-alpha"
+    "@stackr/stackr-js": "^0.1.5-alpha",
+    "ethers": "5.7.2"
   }
 }

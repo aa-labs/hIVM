@@ -19,9 +19,6 @@ const main = (filePath: string): void => {
     }
     const bytecode = generateBytecode(data);
     console.log({ bytecode });
-    const byteHex = encodeToHex(bytecode);
-    console.log(byteHex);
-    console.log(bytecode.split("_"));
   });
 };
 

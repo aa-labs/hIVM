@@ -1,47 +1,49 @@
+import { hexlify } from "ethers/lib/utils";
+
 interface ParsedToken {
   command: string;
   args: Record<string, string | string[]>;
 }
 
+const commandMap: Record<string, number> = {
+  CONSOLIDATE: 1,
+  SWAP: 2,
+  CALL: 3,
+  USE: 4,
+};
+
+const toHexString = (num: number): string => {
+  return hexlify(num).slice(2);
+};
+
+const stringToHex = (str: string): string => {
+  let hex = "";
+  for (let i = 0; i < str.length; i++) {
+    hex += str.charCodeAt(i).toString(16);
+  }
+  return hex;
+};
+
 export const transpile = (parsedTokens: ParsedToken[]): string => {
-  let bytecode = "";
+  let bytecodeParts: string[] = [];
 
   for (const token of parsedTokens) {
-    bytecode += `${token.command}_`;
+    const commandCode = commandMap[token.command];
+    bytecodeParts.push(toHexString(commandCode) + "_");
 
     for (const [key, value] of Object.entries(token.args)) {
-      // NOTE: we don't need this as we don't want this to be part of the network
-      // bytecode += `${key.toUpperCase()}_`;
       if (Array.isArray(value)) {
-        bytecode += `${value.length}_`;
+        bytecodeParts.push(toHexString(value.length) + "_");
+
         for (const val of value) {
-          bytecode += `${val}_`;
+          bytecodeParts.push(stringToHex(val) + "_");
         }
       } else {
-        bytecode += `${value}_`;
+        bytecodeParts.push(stringToHex(value) + "_");
       }
     }
   }
 
-  // TODO: confirm with ankur: if needs to be reversed 
-  // for (const token of parsedTokens) {
-  //   const argsEntries = Object.entries(token.args);
-  //   for (let i = argsEntries.length - 1; i >= 0; --i) {
-  //     const [key, value] = argsEntries[i];
-  //     if (Array.isArray(value)) {
-  //       for (let j = value.length - 1; j >= 0; --j) {
-  //         bytecode.push(value[j]);
-  //       }
-  //       bytecode.push(value.length.toString());
-  //       bytecode.push(key.toUpperCase());
-  //     } else {
-  //       bytecode.push(value);
-  //       bytecode.push(key.toUpperCase());
-  //     }
-  //   }
-
-  //   bytecode.push(token.command);
-  // }
-
-  return bytecode.slice(0, -1).trim();
+  // Concatenate all parts
+  return "0x" + bytecodeParts.join("");
 };

@@ -5,7 +5,7 @@ interface ParsedToken {
 
 const parser = (tokens: string[][]): ParsedToken[] => {
   return tokens.map((block) => {
-    const command = block[0].slice(0, -1); // Remove the colon
+    const command = block[0].slice(0, -1);
     const args = block
       .slice(1)
       .reduce((acc: Record<string, string | string[]>, line: string) => {

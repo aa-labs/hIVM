@@ -15,4 +15,7 @@ CALL:
   METHOD -> safeMint
   VALUE -> 10
 
+USE:
+  ADDR -> 0xabcd
+
 // this will get all funds on ARB and mint token
