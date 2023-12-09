@@ -14,6 +14,7 @@ SWAP:
   FROM -> ANY
   TO -> USDC
   VALUE -> 10
+  SOURCE -> ARB
 
 // call a random address with a method
 CALL:
