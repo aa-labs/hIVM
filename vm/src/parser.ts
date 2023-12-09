@@ -11,7 +11,6 @@ const parser = (tokens: string[][]): ParsedToken[] => {
       .reduce((acc: Record<string, string | string[]>, line: string) => {
         const [key, value] = line.split(" -> ").map((item) => item.trim());
 
-        // Special handling for CHAINS argument in CONSOLIDATE command
         if (command === "CONSOLIDATE" && key === "CHAINS") {
           acc[key] = value.split(",").map((chain) => chain.trim());
         } else {

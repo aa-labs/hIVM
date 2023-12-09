@@ -5,11 +5,11 @@ interface ParsedToken {
   args: Record<string, string | string[]>;
 }
 
-const commandMap: Record<string, number> = {
-  CONSOLIDATE: 1,
-  SWAP: 2,
-  CALL: 3,
-  USE: 4,
+const OP_CODES: Record<string, number> = {
+  USE: 1,
+  CONSOLIDATE: 2,
+  SWAP: 3,
+  CALL: 4,
 };
 
 const toHexString = (num: number): string => {
@@ -17,6 +17,10 @@ const toHexString = (num: number): string => {
 };
 
 const stringToHex = (str: string): string => {
+  if (str.startsWith("0x")) {
+    return str.slice(2);
+  }
+
   let hex = "";
   for (let i = 0; i < str.length; i++) {
     hex += str.charCodeAt(i).toString(16);
@@ -28,22 +32,25 @@ export const transpile = (parsedTokens: ParsedToken[]): string => {
   let bytecodeParts: string[] = [];
 
   for (const token of parsedTokens) {
-    const commandCode = commandMap[token.command];
-    bytecodeParts.push(toHexString(commandCode) + "_");
+    let argsPart: string[] = [];
+    const argsEntries = Object.entries(token.args).reverse();
 
-    for (const [key, value] of Object.entries(token.args)) {
+    for (const [key, value] of argsEntries) {
       if (Array.isArray(value)) {
-        bytecodeParts.push(toHexString(value.length) + "_");
-
-        for (const val of value) {
-          bytecodeParts.push(stringToHex(val) + "_");
+        for (let i = value.length - 1; i >= 0; i--) {
+          argsPart.push(stringToHex(value[i]));
         }
+        argsPart.push(value.length.toString());
       } else {
-        bytecodeParts.push(stringToHex(value) + "_");
+        argsPart.push(stringToHex(value));
       }
     }
+
+    const opcode = toHexString(OP_CODES[token.command]);
+    argsPart.push(opcode);
+
+    bytecodeParts.push(argsPart.join("_"));
   }
 
-  // Concatenate all parts
-  return "0x" + bytecodeParts.join("");
+  return "0x" + bytecodeParts.join("_");
 };

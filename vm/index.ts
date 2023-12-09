@@ -2,7 +2,6 @@ import fs from "fs";
 import { lexer } from "./src/lexer";
 import { parser } from "./src/parser";
 import { transpile } from "./src/transpiler";
-import { encodeToHex } from "./utils";
 
 const generateBytecode = (input: string): string => {
   const tokens = lexer(input);
