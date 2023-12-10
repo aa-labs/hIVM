@@ -1,6 +1,6 @@
 # hIVM - Hybrid Intent Virtual Machine
 
-![image](https://github.com/ankurdubey521/practical-intents/assets/16562513/551c50a9-6bc6-4829-ab22-d8d8a54fbf21)
+![image](https://github.com/AmanRaj1608/hIVM/assets/16562513/737dde3b-33a0-4405-a791-d892b638dbb4)
 
 ## Overview
 hIVM (Hybrid Intents Virtual Machine) represents a significant leap forward in the field of intent-based programming. Bridging the gap between the expansive potential of generic networks and the precision of use-case-specific models, hIVM introduces a unique approach to decentralized application (DApp) development. This project aims to simplify the DApp development process while maintaining the adaptability and efficiency needed for sophisticated decentralized systems.
