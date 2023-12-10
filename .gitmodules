@@ -1,0 +1,3 @@
+[submodule "practical-intents-solver"]
+	path = practical-intents-solver
+	url = git@github.com:ankurdubey521/practical-intents-solver.git
