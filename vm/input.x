@@ -13,7 +13,7 @@ CONSOLIDATE:
 SWAP:
   FROM -> ANY
   TO -> USDC
-  VALUE -> 5000000
+  VALUE -> 7000000
   CHAIN -> ARB
 
 // call a random address with a method
