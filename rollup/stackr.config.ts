@@ -29,7 +29,7 @@ const stackrConfig: StackrConfig = {
   domain: {
     name: "Stackr MVP v0",
     version: "1",
-    chainId: 42069,
+    chainId: 69420,
     verifyingContract: deployment.app_inbox,
     salt: "0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
   },

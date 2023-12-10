@@ -1,6 +1,14 @@
-import { ActionSchema, FIFOStrategy, MicroRollup } from "@stackr/stackr-js";
+import {
+  ActionEvents,
+  ActionSchema,
+  BatcherEvents,
+  BuilderEvents,
+  FIFOStrategy,
+  MicroRollup,
+} from "@stackr/stackr-js";
 import bodyParser from "body-parser";
 import express, { Request, Response } from "express";
+import cors from "cors";
 import { stackrConfig } from "../stackr.config";
 import { ByteCodeRollup, byteCodeSTF } from "./state";
 import { StateMachine } from "@stackr/stackr-js/execution";
@@ -16,9 +24,17 @@ const rollup = async () => {
 
   const actionSchemaType = {
     type: "String",
+    id: "Uint",
+    byteCode: "String",
+    programCounter: "Uint",
+    transactionData: {
+      id: "Uint",
+      type: "String",
+      hashs: "String",
+    },
   };
 
-  const actionInput = new ActionSchema("update-counter", actionSchemaType);
+  const actionInput = new ActionSchema("update-state", actionSchemaType);
 
   const buildStrategy = new FIFOStrategy();
 
@@ -30,23 +46,24 @@ const rollup = async () => {
     useSyncer: { autorun: true },
   });
 
-  // events.action.onEvent(ActionEvents.SUBMIT_ACTION, (action) => {
-  //   console.log("action submitted", action);
-  // });
+  events.action.onEvent(ActionEvents.SUBMIT_ACTION, (action) => {
+    console.log("action submitted", action);
+  });
 
-  // events.batcher.onEvent(BatcherEvents.BATCH_ACTION, (batch) => {
-  //   console.log("action batched", batch);
-  // });
+  events.batcher.onEvent(BatcherEvents.BATCH_ACTION, (batch) => {
+    console.log("action batched", batch);
+  });
 
-  // events.builder.onEvent(BuilderEvents.ORDER_BATCH, (batch) => {
-  //   console.log("action batch ordered", batch);
-  // });
+  events.builder.onEvent(BuilderEvents.ORDER_BATCH, (batch) => {
+    console.log("action batch ordered", batch);
+  });
 
   return { state, actions };
 };
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors());
 const { actions, state } = await rollup();
 
 app.get("/", (req: Request, res: Response) => {
@@ -54,7 +71,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.post("/", async (req: Request, res: Response) => {
-  const schema = actions.getSchema("update-counter");
+  const schema = actions.getSchema("update-state");
 
   if (!schema) {
     res.status(400).send({ message: "error" });
